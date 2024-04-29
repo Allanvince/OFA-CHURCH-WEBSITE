@@ -12,35 +12,33 @@
 <body>
 
     <div class="container" id="container">
+       
         <div class="form-container sign-in">
-            <form id="login-form"></form>>
-                <h1>Create Account</h1>
+            <form id="login-form">
+                <h1>Sign up </h1>
+                <input type="text" placeholder="username" name="username" required>
                
-                <span>or use your email for registeration</span>
-                <input type="text" placeholder="name" name="username">
-                <input type="email" placeholder="email" name="email">
-                <input type="password" placeholder="Password" name="password">
+                
+                <input type="email" placeholder="email" name="email" required>
+                <input type="password" placeholder="Password" name="password" required>
+                
+                <a href="#">Forget Your Password?</a>
                 <div id="error-message" style="display: none; color: red;"></div>
-                <button type="submit">Create account</button>
+                <button type="submit">Sign up </button>
             </form>
         </div>
-    
         <div class="toggle-container">
             <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Welcome Back!</h1>
-                    <p>We believe that all me are sinners and need a sevior through Jesus Christ our lord,our master and our God</p>
-                    <button class="hidden" id="login">Sign In</button>
-                </div>
+                
                 <div class="toggle-panel toggle-right">
                     <h1>OFA - KAMUKUNJI</h1>
                     <p>ONE FOR ALL - ALL FOR GOD</p>
-                    <a href="account.html"><button class="hidden" id="register">Login</button></a>
-                    
+                    <a href="login.html"><button >Login</button></a>
                 </div>
             </div>
         </div>
     </div>
+
 
     
 </body>
@@ -48,16 +46,34 @@
     document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('login-form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent form submission
-        const formData = new FormData(this);
-        fetch('ofa.up.railway.app/api/signup/', {
-            method: 'POST',
-            body: formData,
-        })
+        
+        const apiurl = 'https://ofa.up.railway.app/api/signup/';
+        
+        console.log(apiurl)
+        const formData = {};
+        for (const field of this.elements) {
+            if (field.name) {
+                formData[field.name] = field.value;
+            }
+           
+        }
+        console.log(formData)
+        
+        fetch(apiurl, {
+
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // Set content type to JSON
+                },
+                body: JSON.stringify(formData),
+                 // Convert JSON object to string
+            })
         .then(response => {
+            console.log(response)
             if (response.ok) {
                 return response.json();
             }
-            throw new Error('signup failed');
+            throw new Error('Sign up failed');
         })
         .then(data => {
             // Redirect to index.html upon successful login
@@ -67,12 +83,13 @@
             console.error('Error:', error);
             // Display error message to the user
             const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = 'Fill are the fileds';
+            errorMessage.textContent = 'Fill all fields.';
             errorMessage.style.display = 'block';
         });
     });
 });
 
 </script>
+
 
 </html>
